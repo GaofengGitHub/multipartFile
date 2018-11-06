@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../assets/css/mui.min.css" />
+		<link rel="stylesheet" href="../../assets/css/page/iphoneX.css" />
+		<link rel="stylesheet" href="../../assets/css/page/squadron.css" />
+		<link rel="stylesheet" href="../../assets/css/page/addwork.css" />
+		<link href="../../assets/css/uploader.css" rel="stylesheet" type="text/css" />
+		<title>添加活动作品</title>
+		<style type="text/css">
+			
+		</style>
+	</head>
+
+	<body>
+		<!--<div class="videoBox">
+			<span class="mui-btn mui-btn-red" id="removeVideo">关闭</span>
+			<video src='' controls="controls" autoplay id="video"></video>
+		</div>-->
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">
+				提交作品
+			</h1>
+			<span id="done" class="mui-icon mui-pull-right">提交</span>
+		</header>
+		<div class="mui-content">
+			<div class="add-work-title">
+				<input type="text" placeholder="请填写标题" id="work-title" />
+			</div>
+			<div class="m-add-circle">
+
+				<textarea id="work-text" placeholder="活动方案、寻访过程、队员活动感想、活动总结等的文字描述..."></textarea>
+				<div class="media-box">
+					<div>
+						<div class="title">
+							添加图片
+						</div>
+						<ul id="publishPhotoList" class="publish-circle-photo-list mui-clearfix">
+							<li id="addCirclePhotoBtn">
+								<div class="publish-avar">
+									<img src="../../assets/images/squadron/upload-picture.png" />
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div id="uploadVideoBox">
+						<!--<div class="title">
+							添加视频
+						</div>
+						<ul id="publishVideoList" class="publish-circle-photo-list mui-clearfix">
+							<li id="addCircleVideoBtn" class="x-button">
+								<div class="publish-avar">
+									<img src="../../assets/images/squadron/upload-picture.png">
+									<input type="file" name="videoUploadInput" id="videoUploadInput" value="" class="input" accept="video/*"/>
+									</img >
+								</div>
+							</li>
+						</ul>
+						<div class="progress-box" >
+							<div id="progress" class="mui-progressbar">
+								<span></span>
+							</div>
+							<div class="btn-box">
+								<span id="uploadStatus"></span>
+								<a class="mui-btn mui-btn-mini mui-btn-red" id="pauseUpload" >暂停</a>
+								<a class="mui-btn mui-btn-mini mui-btn-red" id="cancelUpload">删除</a>
+							</div>
+							
+						</div>-->
+					</div>
+					<div id="uploadAudioBox">
+						<!--<div class="title">
+							添加音频
+						</div>
+						<ul id="publishFileList" class="publish-circle-photo-list mui-clearfix">
+							<li id="addCircleFileBtn" class="x-button">
+								<div class="publish-avar">
+									<img src="../../assets/images/squadron/upload-picture.png">
+									<input type="file" name="FileUploadInput" id="FileUploadInput" value="" class="input" accept="audio/*"/>
+									</img >
+								</div>
+							</li>
+						</ul>
+						<div class="progress-box" >
+							<div id="progressFile" class="mui-progressbar">
+								<span></span>
+							</div>
+							<div class="btn-box">
+								<span id="uploadStatusAuido"></span>
+								<a class="mui-btn mui-btn-mini mui-btn-red" id="pauseUploadFile" >暂停</a>
+								<a class="mui-btn mui-btn-mini mui-btn-red" id="cancelUploadFile">删除</a>
+							</div>
+							
+						</div>-->
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+
+		<script src="../../lib/mui.min.js"></script>
+		<script src="../../lib/arttemplate.js"></script>
+		<script src="../../assets/js/config.js"></script>
+		<script src="../../assets/js/util.js"></script>
+		<script src="../../assets/js/page/work.js"></script>
+	    <script src="../../lib/aliyun-oss-sdk.min.js"></script>
+	    <script src="../../assets/js/page/multipartFile.js"></script>
+	    <!--<script src="https://cdn.bootcss.com/babel-polyfill/7.0.0-beta.49/polyfill.min.js"></script>-->
+	    <!--<script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>-->
+	    
+		<script>
+			mui.init();
+			//添加图片
+			mui.plusReady(function() {
+				videoNum=addWork.init();  
+//				console.log('logutil before')
+//				writeLocalLog('testlocallog.txt','11111')
+//				writeLocalLog('testlocallog.txt','22222')
+//				
+//				function writeLocalLog(dir, mes) {
+//			    	dir = dir||'config.txt';
+//					// 扩展API加载完毕，现在可以正常调用扩展API
+//					var w = null;
+//					plus.io.requestFileSystem( plus.io.PRIVATE_DOC, function( fs ) {
+//						// 可通过fs操作PRIVATE_DOC文件系统 
+//						// fs.root是根目录操作对象DirectoryEntry
+//						fs.root.getFile(dir,{create:true}, function(fileEntry){
+//							// Write data to file
+//							fileEntry.createWriter( function ( writer ) {
+//								w = writer;
+//								writer.onwrite = function ( e ) {
+//									console.log( "Write data success!" ); 
+//								};
+//								
+//								writer.onwriteend = function ( e ) {
+//									console.log( "Writeend abort!" );
+//									try{
+//										writer.abort(); 
+//									}catch(e){
+//										// handle the exception
+//										console.error('MUI writer abort api not good'+e.name);
+//									}
+//								};
+//								// Write data to the end of file.
+//								writer.seek( writer.length );
+//								writer.write( new Date()+mes+"\n" );
+//			//						w.abort(); 
+//							}, function ( e ) {
+//								alert( e.message );
+//							} );
+//			//					w.abort();
+//						});
+//					}, function ( e ) {
+//						alert( "Request file system failed: " + e.message );
+//					} );
+//			    }
+				multipartFile.init('video',false,'uploadVideoBox');
+//				multipartFile.init('audio',false,'uploadAudioBox');
+			});
+			
+				
+//			var file;
+//			var storeAs;
+//			var stsAccessKeyId = "",
+//				stsAccessKeySecret = "",
+//				stsToken = "";
+//			var oss;
+//			var client;
+//			var checkpoint_temp;
+//			var videoNum=0;
+//			var timer;
+//			var errTime=0;
+//			
+//				
+//			
+//			function listenline(bool){
+//				if(bool){
+//					window.addEventListener("offline",function() {
+//			            alert("网络连接已断开,点击续传恢复上传");
+////			            document.querySelector('#continueUpload').classList.remove('mui-btn-grey');
+////			            document.querySelector('#continueUpload').classList.add('mui-btn-red');
+//			        });
+//				}else{
+//					window.removeEventListener("offline",function(){});
+//				}
+//				
+//			}
+//			
+//			function delLogic(){
+//				//删除逻辑重新上传
+//				videoNum=0;
+//				if (uploadFileClient) {
+//					console.log('del 进入uploadfile')
+//					uploadFileClient.cancel();
+//					if (uploadFileClient.isCancel()) {
+//						console.log('del 置空')
+//						currentCheckpoint = null;
+//						uploadFileClient = null;
+//					} else {
+//						plus.nativeUI.toast('删除执行异常，请重试！')
+//						return
+//					}
+//				}
+//				console.log('没进')
+//				document.getElementById('pauseUpload').innerHTML = "暂停";
+//				document.getElementById('uploadStatus').innerHTML = "";
+//				document.getElementById('videoUploadInput').outerHTML='<input type="file" name="videoUploadInput" id="videoUploadInput" value="" class="input" accept="video/*"/>';
+//				document.getElementById('videoUploadInput').onchange = upload;
+//				mui('#progress').progressbar().setProgress(0);
+//				document.getElementById('videoUploadInput').disabled=false;
+//				document.querySelector('.progress-box').style.display='none';
+//				plus.storage.removeItem('VIDEOFILE');
+//				plus.storage.removeItem('VIDEOFILENAME');
+//				plus.storage.removeItem('CPT');
+//			}
+//			
+//			var applyTokenDo = function (func, refreshSts) {
+//				const refresh = typeof (refreshSts) !== 'undefined' ? refreshSts : true;
+//				if (refresh) {
+//					plus.storage.removeItem('VIDEOFILENAME');
+//					window.dataUtil.getSTS(function(result){
+//						if(result.SystemCode==1){
+//							client = new OSS({
+//								region :'oss-cn-shanghai',
+//								accessKeyId: result.data.accessKeyId,
+//								accessKeySecret: result.data.accessKeySecret,
+//								stsToken: result.data.securityToken,
+//								bucket: 'zhsxd'
+//							});
+//							return func(client);
+//						}else{
+//							plus.nativeUI.toast('获取sts失败');
+//							document.getElementById('pauseUpload').innerHTML = "续传";
+//							return
+//						}
+//						
+//					},function(){
+//						plus.nativeUI.toast('请求sts失败');
+//						document.getElementById('pauseUpload').innerHTML = "续传";
+//						return
+//					})
+//				}
+//				return func();
+//			};
+//			var currentCheckpoint;
+//
+//			var progress = function progress(percent, cpt) {
+//			    console.log('Progress: ' + percent);
+//				mui('#progress').progressbar().setProgress(percent*100);
+//				currentCheckpoint = cpt;
+//				// console.log(checkpoint_temp)
+//				plus.storage.setItem('CPT', JSON.stringify(currentCheckpoint));
+//				plus.storage.setItem('PER', JSON.stringify(percent));
+//				var status_p = Math.floor(percent * 100);
+//				if(status_p>=100){
+//					status_p=99;
+//				}
+//				if(document.getElementById('uploadStatus').innerHTML != "状态：上传成功"){
+//					document.getElementById('pauseUpload').innerHTML = "暂停";
+//					document.getElementById('uploadStatus').innerHTML = "状态：传输中"+status_p+"%";	
+//				}else{
+//					console.log('已经成功了')
+//					plus.storage.removeItem('CPT');
+//				}
+////				window.dataUtil.	
+//			};
+//
+//			var uploadFileClient;
+//			var uploadFile = function uploadFile(client) {
+//				console.log('uploadfile 进入')
+//				if (!uploadFileClient || Object.keys(uploadFileClient).length === 0) {
+//					uploadFileClient = client;
+//				}
+//				mui("#progress").progressbar({progress:0}).show();
+//				document.querySelector('.progress-box').style.display='block';
+//				document.getElementById('videoUploadInput').disabled=true;
+//				var file = document.getElementById('videoUploadInput').files[0];
+//				
+//				var key = plus.storage.getItem('VIDEOFILENAME', key)
+//				console.log(key)
+//				if (!key || key ==''){
+//					var nowTime=window.methodUtil.getNowFormatDate();
+//					var	key="/"+nowTime+"/"+window.methodUtil.randomString() + file['name'].substring(file['name'].lastIndexOf('\.'))
+//					plus.storage.setItem('VIDEOFILENAME', key);
+//					console.log(key)
+//				}
+//	
+//				var options = {
+//					progress:progress,
+//					partSize: 100 * 1024,
+//				};
+//				if (currentCheckpoint) {
+//					options.checkpoint = currentCheckpoint;
+//				}
+//				console.log(uploadFileClient)
+//				return uploadFileClient.multipartUpload(key, file, options).then(function (res) {
+//					if(videoNum==0){
+//						videoNum=1;
+//						setTimeout(function(){
+//							console.log('requese before')
+//							window.dataUtil.checkVideoSuccessOrNot(key,function(xhr){
+//								console.log(xhr.getResponseHeader('Content-Length'))
+//								if(xhr.getResponseHeader('Content-Length')>1000){
+//									console.log('upload success: %j', res);
+//									document.getElementById('videoUploadInput').disabled=true;								
+//									console.log('cptinfo===='+plus.storage.getItem('CPT'))
+//									plus.storage.removeItem('CPT');
+//									function getObjectURL(file) { 
+//							            var url = null; 
+//							            if (window.createObjcectURL != undefined) { 
+//							                url = window.createOjcectURL(file); 
+//							            } else if (window.URL != undefined) { 
+//							                url = window.URL.createObjectURL(file); 
+//							            } else if (window.webkitURL != undefined) { 
+//							                url = window.webkitURL.createObjectURL(file); 
+//							            } 
+//							            return url; 
+//							        } 
+//							        console.log(file.path);
+//							        var objURL = getObjectURL(file);
+//							        
+//							        console.log(objURL);
+//									addWork.addOnePhoto('' + objURL, 'video');
+////									currentCheckpoint = null;
+////									uploadFileClient = null;
+//									document.getElementById('uploadStatus').innerHTML = "状态：上传成功";
+//									document.getElementById('pauseUpload').innerHTML = "成功";
+//								}else{
+//									plus.nativeUI.toast('上传出现未知错误，请重新上传');
+//									
+//									document.getElementById('uploadStatus').innerHTML = "状态：异常请删除";
+//									document.getElementById('pauseUpload').innerHTML = "异常";
+//								}
+//								
+//							},function(xhr){
+//								console.log(xhr)
+//								plus.nativeUI.toast('上传出现未知错误，请重新上传');
+//								
+//								document.getElementById('uploadStatus').innerHTML = "状态：异常请删除";
+//								document.getElementById('pauseUpload').innerHTML = "异常";
+//							})
+//						},5000)
+//					}
+//					
+//					
+//					
+//				}).catch(function (err) {
+//					console.error(err.name);
+//					if (uploadFileClient && uploadFileClient.isCancel()) {
+//						console.log('stop-upload!');
+//						document.getElementById('uploadStatus').innerHTML = "状态：已暂停";
+//						document.getElementById('pauseUpload').innerHTML = "续传";
+//					} else {
+////						currentCheckpoint = null;
+////						uploadFileClient = null;
+//						if(err.name=="RequestError"){
+//							document.getElementById('uploadStatus').innerHTML = "状态：网络异常";
+//							document.getElementById('pauseUpload').innerHTML = "续传";
+//						}else{
+//							if(videoNum==0){
+//								if(err.name=='NoSuchUploadError'){
+//									console.error('catch在then之前执行了')
+//									document.getElementById('uploadStatus').innerHTML = "状态：NoSuchUploadError";
+//									document.getElementById('pauseUpload').innerHTML = "续传";
+//								}else{
+//									document.getElementById('pauseUpload').innerHTML = "续传";
+//								}
+//								
+//							}else if(videoNum==1){
+//								if(err.name=='NoSuchUploadError'){
+//									console.error('已执行then，仍然catch住了')
+//								}
+//								
+//							}
+//						}
+//					}
+//				});
+//			};		
+//			
+//			var upload = function() {
+//				if(videoNum==0){
+//					file = document.getElementById('videoUploadInput').files[0];
+//					console.log(file);
+////					storeAs =time+"/test/"+32wei字符串加文件后缀;
+//					console.log('===file对象文件类型======'+file.name)
+//					if(file.name.indexOf('.')==-1){
+//						plus.nativeUI.alert('请选择正确的视频文件类型');
+//						return;
+//					}
+//					if(file['size']>100*1024*1024){
+//						plus.nativeUI.alert('视频不能大于100M');
+//						return;
+//					}else if(file['size']<1024){
+//						plus.nativeUI.alert('视频不能小于1k');
+//						return;
+//					}
+//					if (uploadFileClient) {
+//						applyTokenDo(uploadFile);
+//					} else {
+//						applyTokenDo(uploadFile);
+//					}
+//				}else{
+//					plus.nativeUI.toast('只能上传一个视频');
+//				}
+//			};
+//			
+//			document.getElementById('videoUploadInput').onchange = upload;
+//
+//			mui(".progress-box").on('tap','#cancelUpload',function(){
+//				plus.nativeUI.confirm( "确定要删除上传的视频吗?", function(e){
+//					console.log("Close confirm: "+e.index);
+//					if(e.index==0){
+//						delLogic();
+//
+//						if(document.querySelector(".video_target")) { //有视频
+//							
+//							var videoLi = document.querySelector('.video_li');
+//							document.getElementById('publishVideoList').removeChild(videoLi);
+//							document.getElementById('videoUploadInput').outerHTML='<input type="file" name="videoUploadInput" id="videoUploadInput" value="" class="input" accept="video/*"/>';
+//							document.getElementById('videoUploadInput').onchange = upload;
+//						}
+//
+//						plus.nativeUI.toast('已删除');
+//					}
+//				});
+//			})
+//			mui(".progress-box").on('tap','#pauseUpload',function(){
+//				if(this.innerText=='暂停'){
+//
+//					try{
+//						if (uploadFileClient) {
+//							uploadFileClient.cancel();
+//							if (uploadFileClient.isCancel()) {
+//								console.log('stop-upload!');
+//								this.innerText='续传';
+//								plus.nativeUI.toast('已暂停');
+//							} else {
+//								console.log(uploadFileClient.isCancel());
+//								plus.nativeUI.toast('暂停失败，请重试！')
+//							}
+//						}
+//					}catch (e) {
+//						console.error(e)
+//						this.innerText='续传';
+//					}
+////					listenline(false);
+//				}else if(this.innerText=='续传'){
+//					this.innerText='等待';
+//					if (uploadFileClient) {
+//						applyTokenDo(uploadFile, false);
+//					} else {
+//						applyTokenDo(uploadFile);
+//					}
+//				}else if(this.innerText=='成功'){
+//					plus.nativeUI.toast('视频已上传成功！');
+//				}
+//				else if(this.innerText=='等待'){
+//					console.error(this.innerText);
+//					plus.nativeUI.toast('请等待，正在连接。。');
+//				}else{
+//					console.error(this.innerText);
+//					plus.nativeUI.toast('异常，请删除重传');
+//				}
+//			})
+//			
+//			mui('#publishVideoList').on('tap', 'li.video_li div', function() {
+//				console.log(this.dataset.target);
+//				var videoBox=document.querySelector('.videoBox');
+//				var video=document.querySelector('#video');
+//				video.setAttribute('src',this.dataset.target);
+//				videoBox.style.display='block';
+//				
+//			})
+//			document.getElementById('removeVideo').addEventListener('tap',function(){
+//				this.parentNode.style.display='none';
+//				this.nextElementSibling.setAttribute('src','');
+//			})
+//			
+//			mui("#publishVideoList").on('tap', '.icon-remove-video', function() {
+//				plus.nativeUI.confirm( "确定要删除上传的视频吗?", function(e){
+//					console.log("Close confirm: "+e.index);
+//					if(e.index==0){
+//						videoNum=0;
+//						if (uploadFileClient) {
+//							uploadFileClient.cancel();
+//							if (uploadFileClient.isCancel()) {
+//								currentCheckpoint = null;
+//								uploadFileClient = null;
+//							} else {
+//								plus.nativeUI.toast('删除执行异常，请重试！')
+//								return
+//							}
+//						}
+//						document.getElementById('pauseUpload').innerHTML = "暂停";
+//						document.getElementById('uploadStatus').innerHTML = "";
+//						document.getElementById('videoUploadInput').outerHTML='<input type="file" name="videoUploadInput" id="videoUploadInput" value="" class="input" accept="video/*"/>';
+//						document.getElementById('videoUploadInput').onchange = upload;
+//						mui('#progress').progressbar().setProgress(0);
+//						document.getElementById('videoUploadInput').disabled=false;
+//						document.querySelector('.progress-box').style.display='none';
+//						plus.storage.removeItem('VIDEOFILE');
+//						plus.storage.removeItem('VIDEOFILENAME');
+//						plus.storage.removeItem('CPT');
+//
+//						if(document.querySelector(".video_target")) { //有视频
+//							var videoLi = document.querySelector('.video_li');
+//							document.getElementById('publishVideoList').removeChild(videoLi);
+//							document.getElementById('videoUploadInput').outerHTML='<input type="file" name="videoUploadInput" id="videoUploadInput" value="" class="input" accept="video/*"/>';
+//							document.getElementById('videoUploadInput').onchange = upload;
+//						}
+//
+//						plus.nativeUI.toast('已删除');
+//					}
+//				});
+//			});
+		</script>
+	</body>
+
+</html>
